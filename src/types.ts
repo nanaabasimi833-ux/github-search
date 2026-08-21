@@ -12,3 +12,10 @@ export interface GitHubSearchResponse {
     incomplete_results: boolean
     items: GitHubUser[]
 }
+
+export interface GitHubUserDetail extends GitHubUser {
+  name: string | null
+  bio: string | null
+  followers: number
+  public_repos: number
+}
