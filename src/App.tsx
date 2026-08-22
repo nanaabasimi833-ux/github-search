@@ -14,8 +14,21 @@ function App() {
     setSelectedUser(null)
     setUserDetail(null)
     setError(null)
+    }
+  const messageFor = (status:number):string =>{
+    if (status === 422){
+      return 'Enter a username'
+    }else if (status === 403) {
+      return 'Too many searches. Wait a minute, then try again.'
+    }else if (status === 404){ 
+      return 'No user found'
+  }else{
+    return 'Something went wrong. Try again.'
+  }
   }
 
+
+  
   const handleSearch  = async(search:string) =>{
     try{
       setError(null)
@@ -24,7 +37,7 @@ function App() {
       const response = await fetch(`https://api.github.com/search/users?q=${encodeURIComponent(search)}`)
       
       if(!response.ok){
-        throw new Error(`Github returned ${response.status}`)
+        throw new Error(messageFor(response.status))
   
       }
       const data:GitHubSearchResponse = await response.json()
@@ -32,7 +45,7 @@ function App() {
 
       console.log(data)
     }catch(err){
-      setError(`${err}`);
+      setError(err instanceof Error ? err.message : String(err))
       
     }
       setIsLoading(false)
@@ -46,14 +59,14 @@ function App() {
     const response = await fetch(`https://api.github.com/users/${encodeURIComponent(user.login)}`)
         
     if(!response.ok){
-      throw new Error(`Github returned ${response.status}`)
+      throw new Error(messageFor(response.status))
 
     }
     const data:GitHubUserDetail = await response.json()
 
     setUserDetail(data)
     }catch(err){
-      setError(`${err}`);
+      setError(err instanceof Error ? err.message : String(err))
     
     }
 

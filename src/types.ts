@@ -18,4 +18,7 @@ export interface GitHubUserDetail extends GitHubUser {
   bio: string | null
   followers: number
   public_repos: number
+  following:number
+  location: string | null
+  company: string | null
 }

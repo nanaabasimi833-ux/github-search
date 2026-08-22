@@ -11,7 +11,12 @@ const UserList = ({users,onSelect} : UserListProps) =>{
   <div>
     <ul>
       {users.map((user) =>(
-        <li key={user.id} onClick={()=>onSelect(user)}>{user.login}</li>
+        <li key={user.id}>
+          <button type="button" onClick={()=>onSelect(user)}>
+            <img src={`${user.avatar_url}&s=60`} alt="" width={30} height={30}/>
+            {user.login}
+          </button>
+        </li>
          ))}
            
      </ul>

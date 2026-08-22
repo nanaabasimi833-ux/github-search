@@ -12,6 +12,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
   };
 
   const handleSubmit = () => {
+    if (input.trim() === ''){return}
     onSearch(input);
     setInput("");
   };
@@ -23,7 +24,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
         onChange={handleInputChange}
         placeholder="Search..."
       />
-      <button onClick={handleSubmit}>Search</button>
+      <button disabled = {input.trim() === ''} onClick={handleSubmit}>Search</button>
     </div>
   );
 };
