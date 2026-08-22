@@ -3,6 +3,8 @@ import type { GitHubUser, GitHubSearchResponse, GitHubUserDetail} from './types'
 import SearchBar from './components/SearchBar'
 import UserList from './components/UserList'
 import UserProfile from './components/UserProfile'
+import { Routes, Route } from 'react-router-dom'
+import ProfilePage from './pages/ProfilePage'
 
 function App() {
   const [users, setUsers] = useState<GitHubUser[]>([])
@@ -26,7 +28,6 @@ function App() {
     return 'Something went wrong. Try again.'
   }
   }
-
 
   
   const handleSearch  = async(search:string) =>{
@@ -74,19 +75,26 @@ function App() {
 return (
     <div>
       <SearchBar onSearch={handleSearch}/>
-      {error && <p>{error}</p>}
+      <Routes>
+        <Route path='/' element = {
+        <>
+          {error && <p>{error}</p>}
+          {selectedUser ? (
+            <div>
+              <button onClick={handleBack}>Back</button>
+              {userDetail ? <UserProfile user={userDetail} />
+                : <p>Loading {selectedUser.login}…</p>}
+            </div>
+          ) : isLoading ? (
+            <p>Loading...</p>
+          ) : (
+            <UserList users={users} onSelect={handleSelect} />
+          )}
+        </>
+        }/>
+        <Route path='/user/:login' element={<ProfilePage />} />
 
-      {selectedUser ? (
-        <div>
-          <button onClick={handleBack}>Back</button>
-          {userDetail ? <UserProfile user={userDetail} />
-            : <p>Loading {selectedUser.login}…</p>}
-        </div>
-      ) : isLoading ? (
-        <p>Loading...</p>
-      ) : (
-        <UserList users={users} onSelect={handleSelect} />
-      )}
+      </Routes>
     </div>
   )
 
