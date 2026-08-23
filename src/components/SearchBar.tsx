@@ -18,11 +18,11 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
   };
 
   return (
-    <div>
+    <div className="search-bar">
       <input
         value={input}
         onChange={handleInputChange}
-        placeholder="Search..."
+        placeholder="Search GitHub users…"
       />
       <button disabled = {input.trim() === ''} onClick={handleSubmit}>Search</button>
     </div>

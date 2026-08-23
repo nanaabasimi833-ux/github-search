@@ -39,9 +39,9 @@ import UserProfile from "../components/UserProfile";
   },[login])
 
   return ( 
-    <div>
-      <Link to={'/'}>Back</Link>
-      {error && <p>{error}</p>}
+    <div className="profile-page">
+      <Link to={'/'} className="back-link">← Back to results</Link>
+      {error && <p className="error">{error}</p>}
       { user && <UserProfile user ={user} />}
     </div>
   )

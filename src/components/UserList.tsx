@@ -9,7 +9,7 @@ type UserListProps = {
 const UserList = ({users} : UserListProps) =>{
   return(
   <div>
-    <ul>
+    <ul className="user-list">
       {users.map((user) =>(
         <li key={user.id}>
           <Link to={`/user/${user.login}`} >
@@ -18,9 +18,7 @@ const UserList = ({users} : UserListProps) =>{
           </Link>
         </li>
          ))}
-           
      </ul>
-        
   </div>
       )
         

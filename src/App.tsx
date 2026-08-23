@@ -1,36 +1,47 @@
-import { useState } from 'react'
-import type { GitHubUser, GitHubSearchResponse } from './types'
+import { useEffect, useState } from 'react'
+import type { GitHubUser, GitHubSearchResponse, } from './types'
 import SearchBar from './components/SearchBar'
 import UserList from './components/UserList'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useSearchParams } from 'react-router-dom'
 import ProfilePage from './pages/ProfilePage'
 import { messageFor } from './func/error'
+import './App.css'
 
 function App() {
   const [users, setUsers] = useState<GitHubUser[]>([])
   const [isLoading,setIsLoading] = useState(false)
   const [ error,setError] = useState<string|null>(null)
+  const [searchParams,setSearchParams] = useSearchParams()
 
-  const handleSearch  = async(search:string) =>{
-    try{
+  const currentQuery = searchParams.get('q')
+
+  const handleSearch = (search:string) =>{
+    setSearchParams({q:search})
+  }
+
+  useEffect(()=>{
+    if(!currentQuery){return}
+
+    const loadUsers = async()=>{
       setError(null)
       setIsLoading(true)
+      try{
+        const response = await fetch(`https://api.github.com/search/users?q=${encodeURIComponent(currentQuery)}`)
 
-      const response = await fetch(`https://api.github.com/search/users?q=${encodeURIComponent(search)}`)
+        if(!response.ok){
+          throw new Error(messageFor(response.status))
+        }
+        const data:GitHubSearchResponse = await response.json()
+        setUsers(data.items)
 
-      if(!response.ok){
-        throw new Error(messageFor(response.status))
-
+      }catch(err){
+        setError(err instanceof Error ? err.message : String(err))
       }
-      const data:GitHubSearchResponse = await response.json()
-      setUsers(data.items)
-
-    }catch(err){
-      setError(err instanceof Error ? err.message : String(err))
-
-    }
       setIsLoading(false)
-  }
+    }
+
+    loadUsers()
+  },[currentQuery])
 
   return (
     <div>
@@ -38,8 +49,8 @@ function App() {
       <Routes>
         <Route path='/' element={
           <>
-            {error && <p>{error}</p>}
-            {isLoading ? <p>Loading...</p> : <UserList users={users} />}
+            {error && <p className="error">{error}</p>}
+            {isLoading ? <p className="loading">Searching…</p> : <UserList users={users} />}
           </>
         }/>
         <Route path='/user/:login' element={<ProfilePage />} />
