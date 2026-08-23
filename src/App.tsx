@@ -5,6 +5,7 @@ import UserList from './components/UserList'
 import { Routes, Route, useSearchParams } from 'react-router-dom'
 import ProfilePage from './pages/ProfilePage'
 import { messageFor } from './func/error'
+import sort from './components/sort'
 import './App.css'
 
 function App() {
@@ -19,6 +20,8 @@ function App() {
     setSearchParams({q:search})
   }
 
+    const currentSort = searchParams.get('sort')
+
   useEffect(()=>{
     if(!currentQuery){return}
 
@@ -26,7 +29,7 @@ function App() {
       setError(null)
       setIsLoading(true)
       try{
-        const response = await fetch(`https://api.github.com/search/users?q=${encodeURIComponent(currentQuery)}`)
+        const response = await fetch(`https://api.github.com/search/users?q=${encodeURIComponent(currentQuery)}${sort?`&sort=${sort}` : ''}}`)
 
         if(!response.ok){
           throw new Error(messageFor(response.status))
@@ -41,7 +44,7 @@ function App() {
     }
 
     loadUsers()
-  },[currentQuery])
+  },[currentQuery,currentSort])
 
   return (
     <div>
