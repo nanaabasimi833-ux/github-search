@@ -4,7 +4,7 @@ import SearchBar from './components/SearchBar'
 import UserList from './components/UserList'
 import { Routes, Route } from 'react-router-dom'
 import ProfilePage from './pages/ProfilePage'
-import { messageFor } from './components/error'
+import { messageFor } from './func/error'
 
 function App() {
   const [users, setUsers] = useState<GitHubUser[]>([])
@@ -25,7 +25,6 @@ function App() {
       const data:GitHubSearchResponse = await response.json()
       setUsers(data.items)
 
-      console.log(data)
     }catch(err){
       setError(err instanceof Error ? err.message : String(err))
 

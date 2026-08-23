@@ -8,7 +8,7 @@
       return 'The server cannot find the requested page'
     }
     if(status === 429){
-      return 'Too much many wait a minute'
+      return 'Too many requst, wait a minute'
     }
       return 'Something went wrong. Try again.'
 

@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { GitHubUserDetail } from "../types";
-import { messageFor } from "../components/error";
+import { messageFor } from "../func/error";
 import UserProfile from "../components/UserProfile";
 
  const ProfilePage = () => {
