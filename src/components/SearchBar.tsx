@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from 'react';
+import { useState, type ChangeEvent, type SubmitEvent } from 'react';
 
 type SearchBarProps = {
   onSearch: (search: string) => void
@@ -11,21 +11,22 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
     setInput(event.target.value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();          
     if (input.trim() === ''){return}
     onSearch(input);
     setInput("");
   };
 
   return (
-    <div className="search-bar">
+    <form className="search-bar" onSubmit={handleSubmit}>
       <input
         value={input}
         onChange={handleInputChange}
         placeholder="Search GitHub users…"
       />
-      <button disabled = {input.trim() === ''} onClick={handleSubmit}>Search</button>
-    </div>
+      <button type="submit" disabled={input.trim() === ''}>Search</button>
+    </form>
   );
 };
 

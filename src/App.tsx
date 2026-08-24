@@ -5,7 +5,7 @@ import UserList from './components/UserList'
 import { Routes, Route, useSearchParams } from 'react-router-dom'
 import ProfilePage from './pages/ProfilePage'
 import { messageFor } from './func/error'
-import sort from './components/sort'
+import Sort from './components/Sort'
 import './App.css'
 
 function App() {
@@ -16,11 +16,17 @@ function App() {
 
   const currentQuery = searchParams.get('q')
 
+  const currentSort = searchParams.get('sort') ?? ''
+
   const handleSearch = (search:string) =>{
-    setSearchParams({q:search})
+    // a new search keeps the sort preference, drops everything else
+    setSearchParams(currentSort ? {q:search, sort:currentSort} : {q:search})
   }
 
-    const currentSort = searchParams.get('sort')
+  const handleSortChange = (sort:string) =>{
+    // carry the query forward — setSearchParams replaces the whole query string
+    setSearchParams(sort ? {q:currentQuery ?? '', sort} : {q:currentQuery ?? ''})
+  }
 
   useEffect(()=>{
     if(!currentQuery){return}
@@ -29,7 +35,7 @@ function App() {
       setError(null)
       setIsLoading(true)
       try{
-        const response = await fetch(`https://api.github.com/search/users?q=${encodeURIComponent(currentQuery)}${sort?`&sort=${sort}` : ''}}`)
+        const response = await fetch(`https://api.github.com/search/users?q=${encodeURIComponent(currentQuery)}${currentSort?`&sort=${currentSort}` : ''}`)
 
         if(!response.ok){
           throw new Error(messageFor(response.status))
@@ -53,6 +59,12 @@ function App() {
         <Route path='/' element={
           <>
             {error && <p className="error">{error}</p>}
+            {users.length > 0 && (
+              <div className="sort-row">
+                <label htmlFor="sort">Sort by</label>
+                <Sort value={currentSort} onChange={handleSortChange} />
+              </div>
+            )}
             {isLoading ? <p className="loading">Searching…</p> : <UserList users={users} />}
           </>
         }/>

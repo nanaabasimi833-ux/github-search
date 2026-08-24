@@ -56,6 +56,33 @@
   opacity: 0.6;
 }
 
+/* ── sort row  */
+
+.sort-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.sort-row select {
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--text-h);
+  background: var(--bg);
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.sort-row select:hover {
+  border-color: var(--accent-border);
+}
+
 /* ── results list  */
 
 .user-list {

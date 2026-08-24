@@ -12,7 +12,7 @@ const Sort = ({value, onChange}:SortProps)=>{
   }
 
   return(
-    <select value={value} onChange={handleChange}>
+    <select id="sort" value={value} onChange={handleChange}>
       <option value="">Best match</option>
       <option value="followers">Most followers</option>
       <option value="repositories">Most repositories</option>
